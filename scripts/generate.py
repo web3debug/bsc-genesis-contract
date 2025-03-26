@@ -364,10 +364,10 @@ def testnet():
 
 @main.command(help="Generate contracts for dev environment")
 def dev(
-    dev_chain_id: int = 714,
+    dev_chain_id: int = 162,
     init_burn_ratio: Annotated[str, typer.Option(help="init burn ratio of BscValidatorSet")] = "1000",
     source_chain_id: Annotated[
-        str, typer.Option(help="source chain id of the token recover portal")] = "Binance-Chain-Ganges",
+        str, typer.Option(help="source chain id of the token recover portal")] = "HEC-Chain-Ganges",
     stake_hub_protector: Annotated[str, typer.Option(help="assetProtector of StakeHub")] = "address(0xdEaD)",
     governor_protector: Annotated[str, typer.Option(help="governorProtector of BSCGovernor")] = "address(0xdEaD)",
     token_recover_portal_protector: Annotated[str,
