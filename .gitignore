@@ -14,3 +14,9 @@ lib/forge-std/
 
 .env
 **/.bak
+*/*.bak
+genesis.json
+validators.conf
+*/*.sol-e
+*/*/*.sol-e
+scripts/__pycache__/
