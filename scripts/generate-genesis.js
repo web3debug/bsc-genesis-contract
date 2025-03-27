@@ -13,7 +13,7 @@ program.option('-t, --template <template>', 'Genesis template json', './genesis-
 program.option(
   '--initLockedBNBOnTokenHub <initLockedBNBOnTokenHub>',
   'initLockedBNBOnTokenHub',
-  '176405560900000000000000000'
+  '0x0'
 );
 program.parse(process.argv);
 
