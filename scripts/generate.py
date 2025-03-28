@@ -534,7 +534,7 @@ def recover():
 @main.command(help="Generate init holders")
 def generate_init_holders(
     init_holders: Annotated[str, typer.Argument(help="A list of addresses separated by comma")],
-    init_amount: Annotated[str, typer.Argument(help="The amount of each address") = "10000000000000000000000000", # 1000000e18
+    init_amount: Annotated[str, typer.Argument(help="The amount of each address")] = "10000000000000000000000000", # 1000000e18
     template_file: str = "./scripts/init_holders.template",
     output_file: str = "./scripts/init_holders.js"
 ):
