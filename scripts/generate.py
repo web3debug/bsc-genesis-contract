@@ -440,7 +440,7 @@ def dev(
 @main.command(help="Generate contracts for custom environment")
 def custom(
     custom_network: Annotated[str, typer.Option(help="network name")] = "mainnet",
-    custom_chain_id: Annotated[int, typer.Option(help="chain id of the network")] = 162,
+    custom_chain_id: Annotated[int, typer.Option(help="chain id of the network")] = 1682,
     init_burn_ratio: Annotated[str, typer.Option(help="init burn ratio of BscValidatorSet")] = "1000",
     source_chain_id: Annotated[
         str, typer.Option(help="source chain id of the token recover portal")] = "Hard-Wood-1",
