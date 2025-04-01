@@ -247,7 +247,7 @@ def generate_gov_hub():
 
 def generate_genesis(block_interval="3", output="./genesis.json"):
     subprocess.run(["forge", "build"], cwd=work_dir, check=True)
-    subprocess.run(["node", "scripts/generate-genesis.js", "--chainId", f"{chain_id}", "--output", f"{output}"], "--period", f"{block_interval}", cwd=work_dir, check=True)
+    subprocess.run(["node", "scripts/generate-genesis.js", "--chainId", f"{chain_id}", "--output", f"{output}", "--period", f"{block_interval}"], cwd=work_dir, check=True)
 
 
 @main.command(help="Generate contracts for BSC mainnet")
