@@ -10,6 +10,7 @@ program.version('0.0.1');
 program.option('-c, --chainId <chainId>', 'chain id', '714');
 program.option('-o, --output <output-file>', 'Genesis json file', './genesis.json');
 program.option('-t, --template <template>', 'Genesis template json', './genesis-template.json');
+program.option('-p, --period <period>', 'Parlia period', '3');
 program.option(
   '--initLockedBNBOnTokenHub <initLockedBNBOnTokenHub>',
   'initLockedBNBOnTokenHub',
@@ -66,6 +67,7 @@ Promise.all([
     chainId: program.chainId,
     initHolders: init_holders,
     extraData: web3.utils.bytesToHex(validators.extraValidatorBytes),
+    parliaPeriod: program.period.endsWith(" seconds") ? program.period.slice(0, -8) : program.period,
   };
 
   result.forEach((r) => {

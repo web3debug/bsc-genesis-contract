@@ -245,9 +245,9 @@ def generate_gov_hub():
         )
 
 
-def generate_genesis(output="./genesis.json"):
+def generate_genesis(block_interval="3", output="./genesis.json"):
     subprocess.run(["forge", "build"], cwd=work_dir, check=True)
-    subprocess.run(["node", "scripts/generate-genesis.js", "--chainId", f"{chain_id}", "--output", f"{output}"], cwd=work_dir, check=True)
+    subprocess.run(["node", "scripts/generate-genesis.js", "--chainId", f"{chain_id}", "--output", f"{output}"], "--period", f"{block_interval}", cwd=work_dir, check=True)
 
 
 @main.command(help="Generate contracts for BSC mainnet")
@@ -358,7 +358,7 @@ def testnet():
     generate_timelock(init_minimal_delay)
     generate_token_hub(lock_period_for_token_recover)
 
-    generate_genesis("./genesis-testnet.json")
+    generate_genesis(block_interval,"./genesis-testnet.json")
     print("Generate genesis of testnet successfully")
 
 
@@ -433,7 +433,7 @@ def dev(
     generate_timelock(init_minimal_delay)
     generate_token_hub(lock_period_for_token_recover)
 
-    generate_genesis()
+    generate_genesis(block_interval)
     print("Generate genesis of dev environment successfully")
 
 
@@ -509,7 +509,7 @@ def custom(
     generate_timelock(init_minimal_delay)
     generate_token_hub(lock_period_for_token_recover)
 
-    generate_genesis()
+    generate_genesis(block_interval)
     print("Generate genesis of dev environment successfully")
 
 @main.command(help="Recover from the backup")

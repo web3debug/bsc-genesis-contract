@@ -29,14 +29,14 @@
     "keplerTime": 0,
     "feynmanTime": 0,
     "parlia": {
-      "period": 3,
+      "period": {{parliaPeriod}},
       "epoch": 200
     }
   },
   "nonce": "0x0",
-  "timestamp": "0x5e9da7ce",
+  "timestamp": "0x67eabc00",
   "extraData": "{{extraData}}",
-  "gasLimit": "0x2625a00",
+  "gasLimit": "0x8583b00",
   "difficulty": "0x1",
   "mixHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
   "coinbase": "0xffffFFFfFFffffffffffffffFfFFFfffFFFfFFfE",
