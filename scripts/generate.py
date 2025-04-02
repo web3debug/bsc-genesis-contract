@@ -102,7 +102,7 @@ def generate_slash_indicator(misdemeanor_threshold, felony_threshold, init_felon
     replace_parameter(contract, "uint256 public constant FELONY_THRESHOLD", f"{felony_threshold}")
     replace_parameter(contract, "uint256 public constant INIT_FELONY_SLASH_SCOPE", f"{init_felony_slash_scope}")
 
-    if network == "dev":
+    if network == "dev" or network == "custom":
         insert(contract, "alreadyInit = true;", "\t\tenableMaliciousVoteSlash = true;")
 
 
@@ -166,14 +166,14 @@ def generate_system():
 
 
 def generate_system_reward():
-    if network == "dev":
+    if network == "dev" or network == "custom":
         contract = "SystemReward.sol"
         backup_file(
             os.path.join(work_dir, "contracts", contract), os.path.join(work_dir, "contracts", contract[:-4] + ".bak")
         )
 
-        insert(contract, "numOperator = 2;", "\t\toperators[VALIDATOR_CONTRACT_ADDR] = true;")
-        insert(contract, "numOperator = 2;", "\t\toperators[SLASH_CONTRACT_ADDR] = true;")
+        insert(contract, "numOperator = 2;", "\t\t\toperators[VALIDATOR_CONTRACT_ADDR] = true;")
+        insert(contract, "numOperator = 2;", "\t\t\toperators[SLASH_CONTRACT_ADDR] = true;")
         replace(contract, "numOperator = 2;", "numOperator = 4;")
 
 
@@ -211,7 +211,7 @@ def generate_validator_set(init_validator_set_bytes, init_burn_ratio, epoch):
     replace_parameter(contract, "bytes public constant INIT_VALIDATORSET_BYTES", f"hex\"{init_validator_set_bytes}\"")
     replace_parameter(contract, "uint256 public constant EPOCH", f"{epoch}")
 
-    if network == "dev":
+    if network == "dev" or network == "custom":
         insert(
             contract, r"for \(uint256 i; i < validatorSetPkg\.validatorSet\.length; \+\+i\)",
             "\t\tValidatorExtra memory validatorExtra;"
@@ -237,7 +237,7 @@ def generate_gov_hub():
         os.path.join(work_dir, "contracts", contract), os.path.join(work_dir, "contracts", contract[:-4] + ".bak")
     )
 
-    if network == "dev":
+    if network == "dev" or network == "custom":
         replace(
             contract,
             r"handleSynPackage\(\s*uint8,\s*bytes calldata msgBytes\s*\) external override onlyCrossChainContract",
@@ -510,7 +510,7 @@ def custom(
     generate_token_hub(lock_period_for_token_recover)
 
     generate_genesis(block_interval)
-    print("Generate genesis of dev environment successfully")
+    print("Generate genesis of custom environment successfully")
 
 @main.command(help="Recover from the backup")
 def recover():
