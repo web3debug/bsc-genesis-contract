@@ -19,7 +19,7 @@ contract TendermintLightClient is ILightClient, System, IParamSubscriber {
     uint64 public latestHeight;  // @dev deprecated
     bytes32 public chainID;  // @dev deprecated
 
-    bytes public constant INIT_CONSENSUS_STATE_BYTES;
+    bytes public constant INIT_CONSENSUS_STATE_BYTES = hex"00000000000000000000000000000000";
     uint256 public constant INIT_REWARD_FOR_VALIDATOR_SER_CHANGE = 1e16;
     uint256 public rewardForValidatorSetChange;
 
