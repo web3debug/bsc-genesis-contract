@@ -1,5 +1,9 @@
 const web3 = require('web3');
 const init_holders = [
+  {% for validator in validators %}{
+     address: '{{validator }}',
+     balance: BigInt('20010000000000000000000').toString(16)
+  },{% endfor %}
   {% for initHolder in initHolders %}{
      address: '{{initHolder }}',
      balance: BigInt('{{initAmount }}').toString(16)
