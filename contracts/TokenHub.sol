@@ -20,7 +20,7 @@ contract TokenHub is ITokenHub, System, IParamSubscriber, IApplication, ISystemR
     uint256 public constant MAX_BEP2_TOTAL_SUPPLY = 9000000000000000000;
     uint8 public constant BEP2_TOKEN_DECIMALS = 8;
     bytes32 public constant BEP2_TOKEN_SYMBOL_FOR_BNB =
-        0x424E420000000000000000000000000000000000000000000000000000000000; // "BNB"
+        0x4845430000000000000000000000000000000000000000000000000000000000; // "HEC"
 
     uint256 public constant INIT_MINIMUM_RELAY_FEE = 2e15;
     uint256 public constant REWARD_UPPER_LIMIT = 1e18;

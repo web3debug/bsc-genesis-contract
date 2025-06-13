@@ -102,7 +102,7 @@ def generate_slash_indicator(misdemeanor_threshold, felony_threshold, init_felon
     replace_parameter(contract, "uint256 public constant FELONY_THRESHOLD", f"{felony_threshold}")
     replace_parameter(contract, "uint256 public constant INIT_FELONY_SLASH_SCOPE", f"{init_felony_slash_scope}")
 
-    if network == "dev":
+    if network == "dev" or network == "custom":
         insert(contract, "alreadyInit = true;", "\t\tenableMaliciousVoteSlash = true;")
 
 
@@ -166,14 +166,14 @@ def generate_system():
 
 
 def generate_system_reward():
-    if network == "dev":
+    if network == "dev" or network == "custom":
         contract = "SystemReward.sol"
         backup_file(
             os.path.join(work_dir, "contracts", contract), os.path.join(work_dir, "contracts", contract[:-4] + ".bak")
         )
 
-        insert(contract, "numOperator = 2;", "\t\toperators[VALIDATOR_CONTRACT_ADDR] = true;")
-        insert(contract, "numOperator = 2;", "\t\toperators[SLASH_CONTRACT_ADDR] = true;")
+        insert(contract, "numOperator = 2;", "\t\t\toperators[VALIDATOR_CONTRACT_ADDR] = true;")
+        insert(contract, "numOperator = 2;", "\t\t\toperators[SLASH_CONTRACT_ADDR] = true;")
         replace(contract, "numOperator = 2;", "numOperator = 4;")
 
 
@@ -210,7 +210,7 @@ def generate_validator_set(init_validator_set_bytes, init_burn_ratio):
     replace_parameter(contract, "uint256 public constant INIT_BURN_RATIO", f"{init_burn_ratio}")
     replace_parameter(contract, "bytes public constant INIT_VALIDATORSET_BYTES", f"hex\"{init_validator_set_bytes}\"")
 
-    if network == "dev":
+    if network == "dev" or network == "custom":
         insert(
             contract, r"for \(uint256 i; i < validatorSetPkg\.validatorSet\.length; \+\+i\)",
             "\t\tValidatorExtra memory validatorExtra;"
@@ -236,7 +236,7 @@ def generate_gov_hub():
         os.path.join(work_dir, "contracts", contract), os.path.join(work_dir, "contracts", contract[:-4] + ".bak")
     )
 
-    if network == "dev":
+    if network == "dev" or network == "custom":
         replace(
             contract,
             r"handleSynPackage\(\s*uint8,\s*bytes calldata msgBytes\s*\) external override onlyCrossChainContract",
@@ -244,9 +244,9 @@ def generate_gov_hub():
         )
 
 
-def generate_genesis(output="./genesis.json"):
+def generate_genesis(block_interval="3", output="./genesis.json"):
     subprocess.run(["forge", "build"], cwd=work_dir, check=True)
-    subprocess.run(["node", "scripts/generate-genesis.js", "--chainId", f"{chain_id}", "--output", f"{output}"], cwd=work_dir, check=True)
+    subprocess.run(["node", "scripts/generate-genesis.js", "--chainId", f"{chain_id}", "--output", f"{output}", "--period", f"{block_interval}"], cwd=work_dir, check=True)
 
 
 @main.command(help="Generate contracts for BSC mainnet")
@@ -355,13 +355,13 @@ def testnet():
     generate_timelock(init_minimal_delay)
     generate_token_hub(lock_period_for_token_recover)
 
-    generate_genesis("./genesis-testnet.json")
+    generate_genesis(block_interval,"./genesis-testnet.json")
     print("Generate genesis of testnet successfully")
 
 
 @main.command(help="Generate contracts for dev environment")
 def dev(
-    dev_chain_id: int = 714,
+    dev_chain_id: Annotated[int, typer.Option(help="chain id of the network")] = 714,
     init_burn_ratio: Annotated[str, typer.Option(help="init burn ratio of BscValidatorSet")] = "1000",
     source_chain_id: Annotated[
         str, typer.Option(help="source chain id of the token recover portal")] = "Binance-Chain-Ganges",
@@ -429,9 +429,84 @@ def dev(
     generate_timelock(init_minimal_delay)
     generate_token_hub(lock_period_for_token_recover)
 
-    generate_genesis("./genesis-dev.json")
+    generate_genesis(block_interval, "./genesis-dev.json")
     print("Generate genesis of dev environment successfully")
 
+
+@main.command(help="Generate contracts for custom environment")
+def custom(
+    custom_network: Annotated[str, typer.Option(help="network name")] = "mainnet",
+    custom_chain_id: Annotated[int, typer.Option(help="chain id of the network")] = 1682,
+    init_burn_ratio: Annotated[str, typer.Option(help="init burn ratio of BscValidatorSet")] = "1000",
+    source_chain_id: Annotated[
+        str, typer.Option(help="source chain id of the token recover portal")] = "Hard-Wood-1",
+    stake_hub_protector: Annotated[str, typer.Option(help="assetProtector of StakeHub")] = "address(0xdEaD)",
+    governor_protector: Annotated[str, typer.Option(help="governorProtector of BSCGovernor")] = "address(0xdEaD)",
+    token_recover_portal_protector: Annotated[str,
+                                              typer.Option(help="protector of TokenRecoverPortal")] = "address(0xdEaD)",
+    epoch: str = "200",
+    block_interval: Annotated[str, typer.Option(help="block interval of Parlia")] = "3 seconds",
+    breathe_block_interval: Annotated[str, typer.Option(help="breath block interval of Parlia")] = "1 days",
+    max_elected_validators: Annotated[str, typer.Option(help="maxElectedValidators of StakeHub")] = "45",
+    unbond_period: Annotated[str, typer.Option(help="unbondPeriod of StakeHub")] = "7 days",
+    downtime_jail_time: Annotated[str, typer.Option(help="downtimeJailTime of StakeHub")] = "2 days",
+    felony_jail_time: Annotated[str, typer.Option(help="felonyJailTime of StakeHub")] = "30 days",
+    init_felony_slash_scope: str = "28800",
+    misdemeanor_threshold: str = "50",
+    felony_threshold: str = "150",
+    init_voting_delay: Annotated[str,
+                                 typer.Option(help="INIT_VOTING_DELAY of BSCGovernor")] = "0 hours / BLOCK_INTERVAL",
+    init_voting_period: Annotated[str,
+                                  typer.Option(help="INIT_VOTING_PERIOD of BSCGovernor")] = "7 days / BLOCK_INTERVAL",
+    init_proposal_threshold: Annotated[str, typer.Option(help="INIT_PROPOSAL_THRESHOLD of BSCGovernor")] = "200 ether",
+    init_quorum_numerator: Annotated[str, typer.Option(help="INIT_QUORUM_NUMERATOR of BSCGovernor")] = "10",
+    propose_start_threshold: Annotated[
+        str, typer.Option(help="PROPOSE_START_GOVBNB_SUPPLY_THRESHOLD of BSCGovernor")] = "10_000_000 ether",
+    init_min_period_after_quorum: Annotated[
+        str, typer.Option(help="INIT_MIN_PERIOD_AFTER_QUORUM of BSCGovernor")] = "uint64(1 days / BLOCK_INTERVAL)",
+    init_minimal_delay: Annotated[str, typer.Option(help="INIT_MINIMAL_DELAY of BSCTimelock")] = "24 hours",
+    lock_period_for_token_recover: Annotated[str,
+                                             typer.Option(help="LOCK_PERIOD_FOR_TOKEN_RECOVER of TokenHub")] = "7 days",
+):
+    global network, chain_id, hex_chain_id
+    network = custom_network
+    chain_id = custom_chain_id
+    hex_chain_id = convert_chain_id(chain_id)
+
+    try:
+        result = subprocess.run(
+            [
+                "node", "-e",
+                "const exportsObj = require(\'./scripts/validators.js\'); console.log(exportsObj.validatorSetBytes.toString(\'hex\'));"
+            ],
+            capture_output=True,
+            text=True,
+            check=True,
+            cwd=work_dir
+        )
+        init_validator_set_bytes = result.stdout.strip()[2:]
+    except subprocess.CalledProcessError as e:
+        raise Exception(f"Error getting init_validatorset_bytes: {e}")
+
+    generate_system()
+    generate_system_reward()
+    generate_gov_hub()
+    generate_slash_indicator(misdemeanor_threshold, felony_threshold, init_felony_slash_scope)
+    generate_validator_set(init_validator_set_bytes, init_burn_ratio, epoch)
+    generate_token_recover_portal(source_chain_id, token_recover_portal_protector)
+    generate_stake_hub(
+        breathe_block_interval, max_elected_validators, unbond_period, downtime_jail_time, felony_jail_time,
+        stake_hub_protector
+    )
+    generate_governor(
+        block_interval, init_voting_delay, init_voting_period, init_proposal_threshold, init_quorum_numerator,
+        propose_start_threshold, init_min_period_after_quorum, governor_protector
+    )
+    generate_timelock(init_minimal_delay)
+    generate_token_hub(lock_period_for_token_recover)
+
+    generate_genesis(block_interval)
+    print("Generate genesis of custom environment successfully")
 
 @main.command(help="Recover from the backup")
 def recover():
@@ -454,13 +529,16 @@ def recover():
 
 @main.command(help="Generate init holders")
 def generate_init_holders(
+    validators: Annotated[str, typer.Argument(help="A list of addresses separated by comma")],
     init_holders: Annotated[str, typer.Argument(help="A list of addresses separated by comma")],
+    init_amount: Annotated[str, typer.Argument(help="The amount of each address")] = "10000000000000000000000000", # 1000000e18
     template_file: str = "./scripts/init_holders.template",
     output_file: str = "./scripts/init_holders.js"
 ):
-    init_holders = init_holders.split(",")
     data = {
-        "initHolders": init_holders,
+        "validators": validators.split(","),
+        "initHolders": init_holders.split(","),
+        "initAmount": init_amount,
     }
 
     generate_from_template(data, template_file, output_file)

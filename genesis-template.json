@@ -29,14 +29,14 @@
     "keplerTime": 0,
     "feynmanTime": 0,
     "parlia": {
-      "period": 3,
+      "period": {{parliaPeriod}},
       "epoch": 200
     }
   },
   "nonce": "0x0",
-  "timestamp": "0x5e9da7ce",
+  "timestamp": "0x67eabc00",
   "extraData": "{{extraData}}",
-  "gasLimit": "0x2625a00",
+  "gasLimit": "0x8583b00",
   "difficulty": "0x1",
   "mixHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
   "coinbase": "0xffffFFFfFFffffffffffffffFfFFFfffFFFfFFfE",
@@ -104,21 +104,15 @@
       "balance": "0x0",
       "code": "{{govToken}}"
     },
-      "0x0000000000000000000000000000000000002006": {
+    "0x0000000000000000000000000000000000002006": {
       "balance": "0x0",
       "code": "{{timelock}}"
     },
     "0x0000000000000000000000000000000000003000": {
       "balance": "0x0",
       "code": "{{tokenRecoverPortal}}"
-    },
-    "0x88cb4D8F77742c24d647BEf8049D3f3C56067cDD": {
-      "balance": "0x100000000000000000000"
-    },
-    "0x42D596440775C90db8d9187b47650986E1063493": {
-      "balance": "0x1000000000000000000000"
     }{% for v in initHolders %},
-    "{{ v.address.replace('0x', '') }}": {
+    "{{ v.address }}": {
       "balance": "0x{{ v.balance }}"
     }{% endfor %}
   },
