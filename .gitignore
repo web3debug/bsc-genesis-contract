@@ -12,11 +12,14 @@ contracts/flattened/*.sol
 # foundry lib
 lib/forge-std/
 
-.env
-**/.bak
 */*.bak
 genesis.json
 validators.conf
 */*.sol-e
 */*/*.sol-e
 scripts/__pycache__/
+
+.env
+**/.bak
+.DS_Store
+*.pyc
