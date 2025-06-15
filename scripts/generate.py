@@ -444,7 +444,6 @@ def custom(
     governor_protector: Annotated[str, typer.Option(help="governorProtector of BSCGovernor")] = "address(0xdEaD)",
     token_recover_portal_protector: Annotated[str,
                                               typer.Option(help="protector of TokenRecoverPortal")] = "address(0xdEaD)",
-    epoch: str = "200",
     block_interval: Annotated[str, typer.Option(help="block interval of Parlia")] = "3 seconds",
     breathe_block_interval: Annotated[str, typer.Option(help="breath block interval of Parlia")] = "1 days",
     max_elected_validators: Annotated[str, typer.Option(help="maxElectedValidators of StakeHub")] = "45",
@@ -492,7 +491,7 @@ def custom(
     generate_system_reward()
     generate_gov_hub()
     generate_slash_indicator(misdemeanor_threshold, felony_threshold, init_felony_slash_scope)
-    generate_validator_set(init_validator_set_bytes, init_burn_ratio, epoch)
+    generate_validator_set(init_validator_set_bytes, init_burn_ratio)
     generate_token_recover_portal(source_chain_id, token_recover_portal_protector)
     generate_stake_hub(
         breathe_block_interval, max_elected_validators, unbond_period, downtime_jail_time, felony_jail_time,
