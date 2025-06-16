@@ -18,8 +18,8 @@ contract GovToken is
     ERC20VotesUpgradeable
 {
     /*----------------- constants -----------------*/
-    string private constant NAME = "Hard Wood Governance Token";
-    string private constant SYMBOL = "govHEC";
+    string private constant NAME = "CCC Governance Token";
+    string private constant SYMBOL = "govCCC";
 
     /*----------------- errors -----------------*/
     // @notice signature: 0x8cd22d19

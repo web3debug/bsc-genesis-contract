@@ -172,8 +172,8 @@ def generate_system_reward():
             os.path.join(work_dir, "contracts", contract), os.path.join(work_dir, "contracts", contract[:-4] + ".bak")
         )
 
-        insert(contract, "numOperator = 2;", "\t\t\toperators[VALIDATOR_CONTRACT_ADDR] = true;")
-        insert(contract, "numOperator = 2;", "\t\t\toperators[SLASH_CONTRACT_ADDR] = true;")
+        insert(contract, "numOperator = 2;", "\t\toperators[VALIDATOR_CONTRACT_ADDR] = true;")
+        insert(contract, "numOperator = 2;", "\t\toperators[SLASH_CONTRACT_ADDR] = true;")
         replace(contract, "numOperator = 2;", "numOperator = 4;")
 
 
