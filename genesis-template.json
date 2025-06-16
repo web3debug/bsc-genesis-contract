@@ -40,7 +40,7 @@
     "parlia": {
       "period": {{parliaPeriod}},
       "epoch": 10000
-    }
+    },
     "blobSchedule": {
       "cancun": {
         "target": 3,
