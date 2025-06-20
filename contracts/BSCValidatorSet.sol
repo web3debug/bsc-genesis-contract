@@ -206,8 +206,8 @@ contract BSCValidatorSet is IBSCValidatorSet, System, IParamSubscriber, IApplica
         // - 1. validators exit maintenance
         // - 2. clear all maintainInfo
         // - 3. get unjailed validators from validatorSet
-        (Validator[] memory validatorSetTemp, bytes[] memory voteAddrsTemp) =
-            _forceMaintainingValidatorsExit(_validatorSet, _voteAddrs);
+        // (Validator[] memory validatorSetTemp, bytes[] memory voteAddrsTemp) =
+        //     _forceMaintainingValidatorsExit(_validatorSet, _voteAddrs);
 
         // step 1: distribute incoming
         for (uint256 i; i < currentValidatorSet.length; ++i) {
@@ -226,9 +226,9 @@ contract BSCValidatorSet is IBSCValidatorSet, System, IParamSubscriber, IApplica
 
         // step 3: do update validator set state
         totalInComing = 0;
-        if (validatorSetTemp.length != 0) {
-            doUpdateState(validatorSetTemp, voteAddrsTemp);
-        }
+        // if (validatorSetTemp.length != 0) {
+        //     doUpdateState(validatorSetTemp, voteAddrsTemp);
+        // }
 
         // step 3: clean slash contract
         ISlashIndicator(SLASH_CONTRACT_ADDR).clean();
